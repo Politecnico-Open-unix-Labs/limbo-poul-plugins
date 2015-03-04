@@ -117,7 +117,6 @@ def admin_credit(admin, nick, new_credit, db):
         db.setCredit(nick, new_credit)
         return u"New credit for {0} is {1}".format(nick, new_credit)
 
-
 def gift_credit(user, nick, credit_gifted, db):
     try:
         credit_gifted = int(credit_gifted)
@@ -153,6 +152,9 @@ def on_message(msg, server):
     elif u"gift" in match[0]:
         nick, amount = match[0].split("gift ")[1].split() #syntax: "!coffee gift $nick $amount"
         return gift_credit(user, nick, amount, db)
+    elif u"add" in match[0]:
+        nick, amount = match[0].split("add ")[1].split() #syntax: "!coffee add $nick $amount"
+        return admin_credit(user, nick, db.getCredit(nick.lower())+int(amount), db)
     elif u"list" in match[0]:
         return get_coffee_balance(db)
     return
